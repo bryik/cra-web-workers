@@ -1,5 +1,7 @@
 # cra-web-workers
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/5089b884-db20-4ea4-8a76-a4f49cb67227/deploy-status)](https://app.netlify.com/sites/cra-web-workers/deploys)
+
 This is a demonstration of using [worker-loader](https://github.com/webpack-contrib/worker-loader) to run a web worker in a create-react-app project.
 
 See [this issue thread](https://github.com/facebook/create-react-app/pull/5886) and [this article](https://dev.to/nicolasrannou/web-workers-in-create-react-app-cra-without-unmounting-4865) for more details.
