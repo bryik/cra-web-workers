@@ -1,36 +1,44 @@
 import React, { useState, useEffect } from "react";
-import * as Comlink from "comlink";
 /* eslint-disable import/no-webpack-loader-syntax */
 import Worker from "worker-loader!../workers/CounterWorker";
 
-async function initWorker(setCount) {
-  const service = Comlink.wrap(new Worker());
-  return {
-    increment: () => service.increment(Comlink.proxy(setCount)),
-    decrement: () => service.decrement(Comlink.proxy(setCount)),
-  };
-}
-
 export default function Counter() {
   const [count, setCount] = useState(0);
-  const [worker, setWorker] = useState({
-    decrement: () => {},
-    increment: () => {},
-  });
+  const [worker, setWorker] = useState(null);
+
+  const increment = () => {
+    if (!worker) return;
+    worker.postMessage({ type: "increment" });
+  };
+  const decrement = () => {
+    if (!worker) return;
+    worker.postMessage({ type: "decrement" });
+  };
 
   useEffect(() => {
-    initWorker(setCount).then((service) => {
-      setWorker(service);
-    });
+    const newWorker = Worker();
+    setWorker(newWorker);
+
+    newWorker.onmessage = (event) => {
+      console.log("<Counter /> recevied a message from a worker!\n", event);
+      const action = event.data;
+      if (action.type === "update") {
+        setCount(action.count);
+      }
+    };
+
+    return function cleanup() {
+      newWorker.terminate();
+    };
   }, []);
 
   return (
     <>
-      <button className="br2" onClick={worker.decrement}>
+      <button className="br2" onClick={decrement}>
         -
       </button>
       <p className="dib mr1 ml1">{count}</p>
-      <button className="br2" onClick={worker.increment}>
+      <button className="br2" onClick={increment}>
         +
       </button>
     </>

@@ -9,8 +9,7 @@ function App() {
         <a href="https://github.com/webpack-contrib/worker-loader">
           worker-loader
         </a>{" "}
-        and <a href="https://github.com/GoogleChromeLabs/comlink">comlink</a> to
-        run a web worker in a create-react-app project. See{" "}
+        to run a web worker in a create-react-app project. See{" "}
         <a href="https://github.com/facebook/create-react-app/pull/5886">
           this issue thread
         </a>{" "}

@@ -1,18 +1,21 @@
-import * as Comlink from "comlink";
-
 let count = 0;
+const increment = () => count++;
+const decrement = () => count--;
 
-async function increment(cb) {
-  count += 1;
-  await cb(count);
-}
-
-async function decrement(cb) {
-  count -= 1;
-  await cb(count);
-}
-
-Comlink.expose({
-  increment,
-  decrement,
-});
+onmessage = (event) => {
+  console.log("CounterWorker recevied a message!\n", event);
+  const action = event.data;
+  switch (action.type) {
+    case "increment":
+      increment();
+      break;
+    case "decrement":
+      decrement();
+      break;
+    default:
+      throw new Error(
+        `Unknown action type passed to CounterWorker: ${action.type}`
+      );
+  }
+  postMessage({ type: "update", count });
+};
