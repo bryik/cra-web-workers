@@ -8,7 +8,19 @@ See [this issue thread](https://github.com/facebook/create-react-app/pull/5886) 
 
 ## why is this useful?
 
-Create-React-App does not currently support web workers (the Webpack config is not setup for it or something). However, [worker-loader](https://github.com/webpack-contrib/worker-loader) can be inlined (side-stepping the need to eject from CRA).
+`create-react-app` does not currently support web workers (the Webpack config is not setup for it or something). However, [worker-loader](https://github.com/webpack-contrib/worker-loader) can be inlined (side-stepping the need to eject from CRA).
+
+## how does it work?
+
+Tracing a click of the increment button:
+
+1. [The increment button](https://github.com/bryik/cra-web-workers/blob/main/src/components/Counter.js#L41) is clicked causing the [`onClick` handler](https://github.com/bryik/cra-web-workers/blob/main/src/components/Counter.js#L9) to be called.
+2. The `onClick` handler calls [`worker.postMessage()`](https://github.com/bryik/cra-web-workers/blob/main/src/components/Counter.js#L11) with an object describing what the worker should do: `{ type: "increment" }`.
+3. The worker, in its separate thread, receives the message which triggers the [`onmessage()` handler](https://github.com/bryik/cra-web-workers/blob/main/src/workers/CounterWorker.js#L5). The `onmessage()` handler looks at `{ type: "increment" }` and determines that the [`increment()` function](https://github.com/bryik/cra-web-workers/blob/main/src/workers/CounterWorker.js#L2) should be called. After `increment()` is called, the worker calls `postMessage()` to inform the main thread of the new count: `{ type: "update", count }`.
+4. The main thread receives the message in the [`newWorker.onmessage()` handler](https://github.com/bryik/cra-web-workers/blob/main/src/components/Counter.js#L22), interprets it, and finally calls [`setCount()`](https://github.com/bryik/cra-web-workers/blob/main/src/components/Counter.js#L26) which updates the component's local state.
+5. `<Counter />` is re-rendered, the new count is displayed.
+
+It is silly to offload quick calculations like this to a worker, but this is just a demo.
 
 ## Available Scripts
 
