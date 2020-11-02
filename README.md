@@ -1,6 +1,14 @@
-# Getting Started with Create React App
+# cra-web-workers
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a demonstration of using [worker-loader](https://github.com/webpack-contrib/worker-loader) and [comlink](https://github.com/GoogleChromeLabs/comlink) to run a web worker in a create-react-app project.
+
+See [this issue thread](https://github.com/facebook/create-react-app/pull/5886) and [this article](https://dev.to/nicolasrannou/web-workers-in-create-react-app-cra-without-unmounting-4865) for more details.
+
+## why is this useful?
+
+Create-React-App does not currently support web workers (the Webpack config is not setup for it or something). However, [worker-loader](https://github.com/webpack-contrib/worker-loader) can be inlined (side-stepping the need to eject from CRA).
+
+[Comlink](https://github.com/GoogleChromeLabs/comlink) is not necessary to get a web worker going in Create-React-App, but I'd read good things about it. Not totally sold yet...
 
 ## Available Scripts
 
