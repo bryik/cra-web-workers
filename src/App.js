@@ -16,8 +16,8 @@ function App() {
             worker-loader
           </a>{" "}
           to run a web worker in a create-react-app project. See{" "}
-          <a href="https://github.com/facebook/create-react-app/pull/5886">
-            this issue thread
+          <a href="https://github.com/bryik/cra-web-workers#cra-web-workers">
+            the README
           </a>{" "}
           for more details.
         </p>
